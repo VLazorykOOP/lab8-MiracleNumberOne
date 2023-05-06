@@ -148,6 +148,100 @@ public:
 };
 
 
+class Node {
+public:
+    int data;
+    Node* left;
+    Node* right;
+
+    Node(int data) {
+        this->data = data;
+        this->left = nullptr;
+        this->right = nullptr;
+    }
+};
+
+class BinaryTree {
+private:
+    Node* root;
+
+public:
+    BinaryTree() {
+        root = nullptr;
+    }
+
+    void insert(int data) {
+        Node* newNode = new Node(data);
+
+        if (root == nullptr) {
+            root = newNode;
+            return;
+        }
+
+        Node* current = root;
+        while (true) {
+            if (data < current->data) {
+                if (current->left == nullptr) {
+                    current->left = newNode;
+                    return;
+                }
+                current = current->left;
+            }
+            else {
+                if (current->right == nullptr) {
+                    current->right = newNode;
+                    return;
+                }
+                current = current->right;
+            }
+        }
+    }
+
+    // Ітератор для обходу дерева в прямому порядку
+    class Iterator {
+    private:
+        Node* current;
+    public:
+        Iterator(Node* root) {
+            current = root;
+            while (current->left != nullptr) {
+                current = current->left;
+            }
+        }
+
+        bool hasNext() {
+            return current != nullptr;
+        }
+
+        int next() {
+            int data = current->data;
+
+            if (current->right != nullptr) {
+                current = current->right;
+                while (current->left != nullptr) {
+                    current = current->left;
+                }
+            }
+            else {
+                Node* temp = current;
+                current = current->left;
+
+                while (current != nullptr && current->right == temp) {
+                    temp = current;
+                    current = current->left;
+                }
+            }
+
+            return data;
+        }
+    };
+
+    Iterator iterator() {
+        return Iterator(root);
+    }
+};
+
+
 int main() {
     int intArr[] = {1, 2, 3, 4, 5};
     int intKey = 3;
@@ -235,6 +329,49 @@ int main() {
         std::cin >> q;
         arrr[i] = q;
     }
+
+
+    BinaryTree tree;
+
+    // Введення даних з клавіатури
+    int n, x;
+    std::cout << "Введіть кількість елементів: ";
+    std::cin >> n;
+    for (int i = 0; i < n; i++) {
+        std::cout << "Введіть елемент: ";
+        std::cin >> x;
+        tree.insert(x);
+    }
+
+    // Обхід дерева в прямому порядку за допомогою ітератора
+    std::cout << "Обхід дерева в прямому порядку: ";
+    BinaryTree::Iterator it = tree.iterator();
+    while (it.hasNext()) {
+        std::cout << it.next() << " ";
+    }
+    std::cout << std::endl;
+
+    // Обхід дерева в прямому порядку за допомогою ітератора
+    std::cout << "Обхід дерева в прямому порядку: ";
+    it = tree.iterator();
+    while (it.hasNext()) {
+        std::cout << it.next() << " ";
+    }
+    std::cout << std::endl;
+
+    // Введення даних за допомогою датчика випадкових чисел
+    srand(time(nullptr));
+    for (int i = 0; i < 10; i++) {
+        tree.insert(rand() % 100);
+    }
+
+    // Обхід дерева в прямому порядку за допомогою ітератора
+    std::cout << "Обхід дерева в прямому порядку: ";
+    it = tree.iterator();
+    while (it.hasNext()) {
+        std::cout << it.next() << " ";
+    }
+    std::cout << std::endl;
 
     return 0;
 }
