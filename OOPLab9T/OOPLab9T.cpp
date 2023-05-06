@@ -62,6 +62,92 @@ void quickSort(T* arr, int left, int right) {
 }
 
 
+template<typename T>
+class Array {
+private:
+    T* data; // вказівник на масив даних
+    int size; // розмір масиву
+
+public:
+    // Конструктори
+    Array() {
+        data = nullptr;
+        size = 0;
+    }
+
+    explicit Array(int s) {
+        data = new T[s];
+        size = s;
+    }
+
+    Array(const Array& other) {
+        data = new T[other.size];
+        size = other.size;
+        for (int i = 0; i < size; ++i) {
+            data[i] = other.data[i];
+        }
+    }
+
+    // Деструктор
+    ~Array() {
+        delete[] data;
+    }
+
+    // Оператор []
+    T& operator[](int index) {
+        return data[index];
+    }
+
+    // Оператор =
+    Array& operator=(const Array& other) {
+        if (this != &other) {
+            delete[] data;
+            data = new T[other.size];
+            size = other.size;
+            for (int i = 0; i < size; ++i) {
+                data[i] = other.data[i];
+            }
+        }
+        return *this;
+    }
+
+    // Оператор +
+    Array operator+(const Array& other) const {
+        Array result(size + other.size);
+        for (int i = 0; i < size; ++i) {
+            result.data[i] = data[i];
+        }
+        for (int i = 0; i < other.size; ++i) {
+            result.data[size + i] = other.data[i];
+        }
+        return result;
+    }
+
+    // Оператор +=
+    Array& operator+=(const Array& other) {
+        Array temp = *this + other;
+        *this = temp;
+        return *this;
+    }
+
+    // Оператор -
+    Array operator-(const Array& other) const {
+        Array result(size);
+        for (int i = 0; i < size; ++i) {
+            result.data[i] = data[i] - other.data[i];
+        }
+        return result;
+    }
+
+    // Оператор -=
+    Array& operator-=(const Array& other) {
+        Array temp = *this - other;
+        *this = temp;
+        return *this;
+    }
+};
+
+
 int main() {
     int intArr[] = {1, 2, 3, 4, 5};
     int intKey = 3;
@@ -135,6 +221,20 @@ int main() {
         std::cout << arr_random[i] << " ";
     }
     std::cout << std::endl;
+
+
+    int x;
+    std::cout << "Enter the size of the array: ";
+    std::cin >> x;
+
+    Array<int> arrr(x);
+
+    for (int i = 0; i < x; ++i) {
+        int q;
+        std::cout << "Enter element " << i << ": ";
+        std::cin >> q;
+        arrr[i] = q;
+    }
 
     return 0;
 }
