@@ -334,13 +334,13 @@ int main() {
     BinaryTree tree;
 
     // Введення даних з клавіатури
-    int n, x;
+    int e, r;
     std::cout << "Введіть кількість елементів: ";
-    std::cin >> n;
-    for (int i = 0; i < n; i++) {
+    std::cin >> e;
+    for (int i = 0; i < e; i++) {
         std::cout << "Введіть елемент: ";
-        std::cin >> x;
-        tree.insert(x);
+        std::cin >> r;
+        tree.insert(r);
     }
 
     // Обхід дерева в прямому порядку за допомогою ітератора
